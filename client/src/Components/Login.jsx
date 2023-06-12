@@ -4,7 +4,9 @@ import CustomLogo from "./CustomLogo";
 import { useNavigate } from "react-router-dom";
 import { get, post, put } from "../utils/Network";
 
-const Login = ({ onButtonClicked }) => {
+const Login = ({ onButtonClicked, activeTab }) => {
+  const isUser = activeTab === "user";
+
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -35,17 +37,19 @@ const Login = ({ onButtonClicked }) => {
       return;
     }
 
-    const checkmail = await get(`user/checkemail/${email}`);
+    const checkmail = await get(`${activeTab}/checkemail/${email}`);
     if (!checkmail.status) {
       alert("Mail does not exists , feel free to Sign Up");
       setIsLoading(false);
       return;
     }
 
-    const response = await post("user/login", body);
+    const response = await post(`${activeTab}/login`, body);
     if (response.status) {
       const token = response.token;
+      const isAdmin = activeTab === "user" ? false : true;
       localStorage.setItem("token", token);
+      localStorage.setItem("isAdmin", isAdmin);
       alert(token);
       navigate("/home", { replace: true });
       // onButtonClicked();
@@ -80,7 +84,11 @@ const Login = ({ onButtonClicked }) => {
         />
 
         <button
-          className="w-full px-4 py-2 mb-2 text-sm font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
+          className={`w-full px-4 py-2 text-sm font-semibold ${
+            isUser ? "text-blue-500" : "text-orange-500"
+          } bg-white border   ${
+            isUser ? "border-blue-500" : "border-orange-500"
+          } rounded hover:${isUser ? "bg-blue-60" : "bg-orange-60"}`}
           onClick={handleClick}
           disabled={isLoading}
         >

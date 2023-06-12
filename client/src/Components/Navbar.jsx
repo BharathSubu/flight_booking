@@ -3,19 +3,40 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
-const navigation = [
-  { name: "Home", href: "/home", current: true },
-  { name: "My Bookings", href: "/booking", current: false },
-  { name: "Add/Remove Flights", href: "/arflights", current: false },
-  { name: "All Bookings", href: "allbookings", current: false },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
+  const currentPath = window.location.pathname;
+  let isAdmin = false;
+  if (localStorage.getItem("isAdmin")) {
+    isAdmin = localStorage.getItem("isAdmin");
+  }
+  const navigation = [
+    { name: "Home", href: "/home", current: currentPath === "/home" },
+    {
+      name: "My Bookings",
+      href: "/booking",
+      current: currentPath === "/booking",
+    },
+  ];
+  if (isAdmin) {
+    navigation.push(
+      {
+        name: "Add/Remove Flights",
+        href: "/arflights",
+        current: currentPath === "/arflights",
+      },
+      {
+        name: "All Bookings",
+        href: "/allbookings",
+        current: currentPath === "/allbookings",
+      }
+    );
+  }
   const navigate = useNavigate();
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -98,7 +119,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            href=""
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
@@ -111,12 +132,14 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
+                            href=""
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                             onClick={() => {
                               localStorage.removeItem("token");
+                              localStorage.removeItem("isAdmin");
                               navigate("/login");
                             }}
                           >

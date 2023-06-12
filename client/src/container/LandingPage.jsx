@@ -3,7 +3,7 @@ import LandingComponent from "../Components/LandingComponent.jsx";
 import Signin from "../Components/Signin.jsx";
 import Login from "../Components/Login.jsx";
 import { useNavigate } from "react-router-dom";
-
+import bgImg from "../assets/bg.jpg";
 const LandingPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -33,20 +33,78 @@ const LandingPage = () => {
     setSignUp(false);
   };
 
-  return (
-    <div className="relative flex  items-center justify-center h-screen overflow-hidden">
-      <div className="absolute inset-0 w-full h-full">
-        <div className="absolute w-full h-full bg-gradient-to-b from-blue-200 via-blue-400 to-blue-900 opacity-75 animate-sea-wave-1"></div>
-        <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 opacity-75 animate-sea-wave-3 mix-blend-multiply filter blur-2xl"></div>
-        <div className="absolute top-0 left-0 w-72 h-72 rounded-full bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 opacity-75 animate-sea-wave-2 mix-blend-multiply filter blur-2xl"></div>
+  const [activeTab, setActiveTab] = useState("user");
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const UserLoginForm = () => {
+    return (
+      <div>
+        {landingPage && (
+          <LandingComponent
+            onButtonClicked={handleButtonClicked}
+            activeTab={activeTab}
+          />
+        )}
+        {signUp && (
+          <Signin onButtonClicked={returnLanding} activeTab={activeTab} />
+        )}
+        {logIn && (
+          <Login onButtonClicked={returnLanding} activeTab={activeTab} />
+        )}
       </div>
-      <div className="mx-4 my-4">
-        <div className="relative max-w-md px-4 py-8 bg-white shadow-lg rounded-lg z-20">
-          {landingPage && (
-            <LandingComponent onButtonClicked={handleButtonClicked} />
-          )}
-          {signUp && <Signin onButtonClicked={returnLanding} />}
-          {logIn && <Login onButtonClicked={returnLanding} />}
+    );
+  };
+
+  const AdminLoginForm = () => {
+    return (
+      <div>
+        {landingPage && (
+          <LandingComponent
+            onButtonClicked={handleButtonClicked}
+            activeTab={activeTab}
+          />
+        )}
+        {signUp && (
+          <Signin onButtonClicked={returnLanding} activeTab={activeTab} />
+        )}
+        {logIn && (
+          <Login onButtonClicked={returnLanding} activeTab={activeTab} />
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex items-center justify-center h-screen  bg-gradient-to-b from-blue-300 via-blue-400 to-blue-900 opacity-100">
+      <div className="relative justify-center m-5">
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="flex justify-center mb-6">
+            <button
+              className={`px-4 py-2 mr-2 font-medium ${
+                activeTab === "user"
+                  ? "bg-blue-500 text-white"
+                  : "text-blue-500"
+              }`}
+              onClick={() => handleTabChange("user")}
+            >
+              User Login
+            </button>
+            <button
+              className={`px-4 py-2 font-medium ${
+                activeTab === "admin"
+                  ? "bg-orange-500 text-white"
+                  : "text-orange-500"
+              }`}
+              onClick={() => handleTabChange("admin")}
+            >
+              {" "}
+              Admin Login
+            </button>
+          </div>
+          {activeTab === "user" ? <UserLoginForm /> : <AdminLoginForm />}
         </div>
       </div>
     </div>
