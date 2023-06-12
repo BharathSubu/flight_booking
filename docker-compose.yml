@@ -1,0 +1,81 @@
+version : "3.8"
+
+services:
+  mongo:
+    restart: always
+    image: mongo
+    container_name: mongo
+    volumes:
+      - ./mongo_data:/data/db
+    ports:
+      - "27018:27017"
+    networks:
+      - shared-network
+
+  api1:
+    container_name: api1
+    restart: always
+    image: api1:1.0
+    build:
+      context: api
+      dockerfile: Dockerfile 
+    ports:
+      - 2000:5000
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    networks:
+      - shared-network
+  
+  api2:
+    container_name: api2
+    restart: always
+    image: api2:1.0
+    build:
+      context: api
+      dockerfile: Dockerfile 
+    ports:
+      - 2001:5000
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    networks:
+      - shared-network
+
+  load_balancer:
+    container_name: load_balancer
+    restart: always
+    image: load_balancer:1.0
+    build:
+      context: load_balancer
+      dockerfile: Dockerfile 
+    ports:
+      - 5000:5000
+    links:
+      - api1
+      - api2
+    depends_on:
+      - api1
+      - api2
+    networks:
+      - shared-network 
+  
+  client:
+    container_name: app_client
+    image: react_app_client:1.0
+    build:
+      context: client
+      dockerfile: Dockerfile 
+    ports:
+      - 3000:3000
+    links:
+      - load_balancer
+    depends_on:
+      - load_balancer
+    networks:
+      - shared-network
+
+networks:
+  shared-network:

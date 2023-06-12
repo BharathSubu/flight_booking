@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes sea-wave-2 {
+  0% {
+    transform: translateX(0) translateY(-20px) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(100%) translateY(-20px) translateZ(0) scaleY(1)
+      rotate(360deg);
+  }
+  100% {
+    transform: translateX(0) translateY(-20px) translateZ(0) scaleY(1)
+      rotate(720deg);
+  }
+}
+
+@keyframes sea-wave-3 {
+  0% {
+    transform: translateX(0) translateY(-20px) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(100%) translateY(-20px) translateZ(0) scaleY(1)
+      rotate(360deg);
+  }
+  100% {
+    transform: translateX(0) translateY(-20px) translateZ(0) scaleY(1)
+      rotate(720deg);
+  }
+}
+
+.animate-sea-wave-2 {
+  animation: sea-wave-2 12s infinite linear;
+}
+
+.animate-sea-wave-3 {
+  animation: sea-wave-3 12s infinite linear;
+}
