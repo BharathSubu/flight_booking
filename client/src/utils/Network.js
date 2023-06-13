@@ -1,5 +1,5 @@
 // network.js
-const API_BASE_URL = "http://localhost:5000/";
+const API_BASE_URL = "http://34.76.8.181:5000/";
 
 async function sendRequest(url, method, body = null) {
   const token = localStorage.getItem("token");
