@@ -46,7 +46,7 @@
 
 ## Installation
 
-To setup the application in you pc follow the steps below:
+To setup the application in your pc follow the steps below:
 
 1. Clone the GitHub repository:
 
