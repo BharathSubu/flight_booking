@@ -9,6 +9,8 @@
 - [Technologies Used](#technologies-used)
 - [Getting Started](#installation)
 - [Logical view ](#logical-view )
+- [Frontend Tree Map](#frontend)
+- [Backend End Points](#end-points)
 
 ## Features
 
@@ -75,6 +77,9 @@ To setup the application in your pc follow the steps below:
 Note: To create account as Admin use adminkey : 12345
 
 
-## logical view 
+## Logical view 
 <img src="https://i.imgur.com/mgPP6YF.png" alt="Logical View" width="70%">
 
+## frontend
+
+## End Points
