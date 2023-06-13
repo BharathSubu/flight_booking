@@ -8,6 +8,8 @@
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#installation)
+- [Features](#Features)
+- [Logical view ](#logical-view )
 
 ## Features
 
@@ -72,3 +74,7 @@ Note: To create account as Admin use adminkey : 12345
 - Implementation of authentication middleware in Node Js for both user and admin
 - Containerized application allowing us to create multiple instance of the server by doing very little changes in docker-compose.yaml file
 - Highly Scalable and faster database
+
+## logical view 
+<img src="https://i.imgur.com/mgPP6YF.png" alt="Logical View" width="70%">
+
