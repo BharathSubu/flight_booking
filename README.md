@@ -8,7 +8,6 @@
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#installation)
-- [Features](#Features)
 - [Logical view ](#logical-view )
 
 ## Features
@@ -28,6 +27,13 @@
 - [x] **Add Flights into the database**
 - [x] **Remove Flights from Databse**
 - [x] **View all Booking made by user and also cancel them** 
+
+### System Feature
+
+- [x] **Implemented my own Load balancer to distribute api requests to two instance of api server running at port 2000 and 2001**
+- [x] **Implementation of authorization middleware in Node Js for both user and admin for specific endpoints**
+- [x] **Containerized application allowing us to create multiple instance of the server by doing very little changes in docker-compose.yaml file**
+- [x] **Highly Scalable and faster database**
 
 ## Technologies Used
 
@@ -68,12 +74,6 @@ To setup the application in you pc follow the steps below:
    
 Note: To create account as Admin use adminkey : 12345
 
-## Features
-
-- Used a load balancer to distribute api requests to two instance of api server running at port 2000 and 2001
-- Implementation of authentication middleware in Node Js for both user and admin
-- Containerized application allowing us to create multiple instance of the server by doing very little changes in docker-compose.yaml file
-- Highly Scalable and faster database
 
 ## logical view 
 <img src="https://i.imgur.com/mgPP6YF.png" alt="Logical View" width="70%">
