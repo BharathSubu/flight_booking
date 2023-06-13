@@ -1,4 +1,5 @@
 // network.js
+
 const API_BASE_URL = "http://localhost:5000/";
 
 async function sendRequest(url, method, body = null) {

@@ -24,10 +24,10 @@ const Allbooking = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex flex-col justify-start h-screen bg-gradient-to-b from-blue-100 via-blue-200 to-blue-300 opacity-100 overflow-hidden mt-10">
+      <div className="flex flex-col justify-start h-screen bg-gradient-to-b from-blue-300 via-blue-400 to-blue-500 opacity-100 overflow-hidden mt-10">
         <div className="w-full h-30 bg-gradient-to-b from-indigo-900 via-indigo-800 to-indigo-600 py-4 flex  justify-center">
           <h3 className="mt-10 text-white text-center text-4xl font-bold">
-            All Bookings Made By User
+            All Bookings Made By Users
           </h3>
         </div>
         <div className="flex flex-col h-screen mt-10">

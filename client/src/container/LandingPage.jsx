@@ -78,7 +78,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen  bg-gradient-to-b from-blue-100 via-blue-200 to-blue-300 opacity-100">
+    <div className="flex items-center justify-center h-screen  bg-gradient-to-b from-blue-300 via-blue-400 to-blue-500 opacity-100">
       <div className="relative justify-center m-5">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex justify-center mb-6">
@@ -90,7 +90,7 @@ const LandingPage = () => {
               }`}
               onClick={() => handleTabChange("user")}
             >
-              User Login
+              User
             </button>
             <button
               className={`px-4 py-2 font-medium ${
@@ -101,7 +101,7 @@ const LandingPage = () => {
               onClick={() => handleTabChange("admin")}
             >
               {" "}
-              Admin Login
+              Admin
             </button>
           </div>
           {activeTab === "user" ? <UserLoginForm /> : <AdminLoginForm />}

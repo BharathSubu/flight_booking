@@ -50,8 +50,8 @@ const Login = ({ onButtonClicked, activeTab }) => {
       const isAdmin = activeTab !== "user";
       localStorage.setItem("token", token);
       localStorage.setItem("user", response.email);
-      if(isAdmin)localStorage.setItem("isAdmin", isAdmin);
-      alert(token);
+      if (isAdmin) localStorage.setItem("isAdmin", isAdmin);
+      alert("Loged In");
       navigate("/home", { replace: true });
       // onButtonClicked();
     } else alert("failed");

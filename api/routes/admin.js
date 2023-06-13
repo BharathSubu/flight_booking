@@ -102,19 +102,15 @@ router
           { $inc: { currcapacity: -count } }
         );
 
-        res
-          .status(200)
-          .json({
-            message: "Flight booking canceled successfully",
-            status: true,
-          });
+        res.status(200).json({
+          message: "Flight booking canceled successfully",
+          status: true,
+        });
       } else {
-        res
-          .status(404)
-          .json({
-            message: "Flight not found in user's bookings",
-            status: false,
-          });
+        res.status(404).json({
+          message: "Flight not found in user's bookings",
+          status: false,
+        });
       }
     } catch (error) {
       res.status(500).json({
@@ -200,7 +196,7 @@ setInterval(async () => {
   } catch (error) {
     console.log("Error occurred while deleting expired flights:", error);
   }
-}, 60000);
+}, 6000000);
 
 //login function
 router.route("/login").post(async (req, res) => {

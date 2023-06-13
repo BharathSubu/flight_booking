@@ -6,10 +6,6 @@ body {
   font-family: "Lato", sans-serif;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
 @keyframes sea-wave-2 {
   0% {
     transform: translateX(0) translateY(-20px) translateZ(0) scaleY(1);

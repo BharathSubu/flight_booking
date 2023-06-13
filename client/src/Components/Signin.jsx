@@ -90,8 +90,8 @@ const Signin = ({ onButtonClicked, activeTab }) => {
           <input
             type="adminkey"
             id="adminkey"
-            className="w-full px-4 py-2 mb-2 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="adminkey"
+            className="w-full px-4 py-2 mb-2 text-sm bg-white border border-gray-700 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            placeholder="USE 12345 as adminkey"
           />
         )}
         <button
