@@ -21,6 +21,19 @@ const Admin = Schema({
     default: true,
     immutable: true,
   },
+  flights: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      count: {
+        type: Number,
+        required: true,
+        default: 1,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Admin", Admin);

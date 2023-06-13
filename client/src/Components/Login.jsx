@@ -47,9 +47,10 @@ const Login = ({ onButtonClicked, activeTab }) => {
     const response = await post(`${activeTab}/login`, body);
     if (response.status) {
       const token = response.token;
-      const isAdmin = activeTab === "user" ? false : true;
+      const isAdmin = activeTab !== "user";
       localStorage.setItem("token", token);
-      localStorage.setItem("isAdmin", isAdmin);
+      localStorage.setItem("user", response.email);
+      if(isAdmin)localStorage.setItem("isAdmin", isAdmin);
       alert(token);
       navigate("/home", { replace: true });
       // onButtonClicked();

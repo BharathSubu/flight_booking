@@ -1,6 +1,7 @@
 const express = require("express");
 const Admin = require("../model/admin.model");
 const Flight = require("../model/flight.model");
+const User = require("../model/user.model");
 
 const config = require("../config");
 const jwt = require("jsonwebtoken");
@@ -28,6 +29,40 @@ router.route("/checkemail/:email").get(async (req, res) => {
     return res.status(500).json({ message: error });
   }
 });
+
+//get allFlights
+router.route("/getallflights").get(middleware.checkAdminToken,async (req, res) => {
+  try {
+    const users = await User.find();
+    const flights = [];
+
+    for (const user of users) {
+      const { email } = user;
+      const bookedFlights = user.flights;
+
+      for (const bookedFlight of bookedFlights) {
+        const { name, count } = bookedFlight;
+        const flight = await Flight.findOne({ name });
+
+        if (flight) {
+          flights.push({ email, flight, count });
+        }
+      }
+    }
+
+    const response = {
+      status: true,
+      message: "User flights have been retrieved",
+      flights,
+    };
+
+    return res.json(response);
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//return all flights
 
 //add flight
 router
@@ -71,24 +106,25 @@ router
   });
 
 //delete flight
-router
-  .route("/deleteflight")
-  .post(middleware.checkAdminToken, async (req, res) => {
-    const flightName = req.body.name;
+router.route("/deleteflight").post(middleware.checkAdminToken, async (req, res) => {
+  const flightName = req.body.name;
 
-    try {
-      const deletionResult = await Flight.deleteOne({ name: flightName });
-
-      if (deletionResult.deletedCount === 0) {
-        return res.status(200).json({ message: "Flight not found" });
-      }
-
-      return res.status(200).json({ message: "Flight deleted successfully" });
-    } catch (error) {
-      console.error("Error deleting the flight:", error);
-      return res.status(500).json({ error: "Internal server error" });
+  try {
+    const deletionResult = await Flight.deleteOne({ name: flightName });
+    if (deletionResult.deletedCount === 0) {
+      return res.status(200).json({ message: "Flight not found" });
     }
-  });
+    await User.updateMany(
+      { "flights.name": flightName },
+      { $pull: { flights: { name: flightName } } }
+    );
+    return res.status(200).json({ message: "Flight deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting the flight:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 //function to delete flight automatically after arrivaltime experies
 setInterval(async () => {
@@ -121,7 +157,7 @@ router.route("/login").post(async (req, res) => {
 
     if (isPasswordValid) {
       let token = jwt.sign(
-        { email: req.body.email, isAdmin: true },
+        { email: req.body.email , isAdmin: true },
         config.key,
         {}
       );
