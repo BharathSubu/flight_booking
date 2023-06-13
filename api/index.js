@@ -4,8 +4,8 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
 
-mongoose.connect("mongodb://localhost:27017/mynewapp", {
-  // mongoose.connect("mongodb://mongo:27017/mynewapp", {
+// mongoose.connect("mongodb://localhost:27017/mynewapp", {
+mongoose.connect("mongodb://mongod:27017/mynewapp", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

@@ -29,68 +29,66 @@ router.route("/checkemail/:email").get(async (req, res) => {
 });
 
 //getItemsforOptions
-router.route('/getItems').get(async (req,res)=>{
-  const flightNames = await Flight.distinct('name').exec();
-    const fromLocations = await Flight.distinct('from').exec();
-    const toLocations = await Flight.distinct('to').exec();
-    const response = {
-      flightNames : flightNames,
-      fromLocations : fromLocations,
-      toLocations : toLocations
-    };
-    res.status(200).json(response);
-})
-
-//search flights
-router.route('/searchflights').post(async (req, res) => {
-  const { flightName, fromLocation, toLocation, departureDate } = req.body;
-
-try {
-  let flights = [];
-  const query = {};
-  console.log(req.body);
-  if (flightName) {
-    query.name = flightName;
-  }
-
-  if (fromLocation) {
-    query.from = fromLocation;
-  }
-
-  if (toLocation) {
-    query.to = toLocation;
-  }
-
-  if (departureDate) {
-    const startDate = new Date(departureDate);
-  const endDate = new Date(departureDate);
-  endDate.setDate(endDate.getDate() + 1);
-  query.departureDateTime = {
-    $gte: startDate,
-    $lt: endDate,
+router.route("/getItems").get(async (req, res) => {
+  const flightNames = await Flight.distinct("name").exec();
+  const fromLocations = await Flight.distinct("from").exec();
+  const toLocations = await Flight.distinct("to").exec();
+  const response = {
+    flightNames: flightNames,
+    fromLocations: fromLocations,
+    toLocations: toLocations,
   };
-  }
-  console.log(query);
-
-  if (Object.keys(query).length === 0) { 
-    flights = await Flight.find();
-  } else { 
-    flights = await Flight.find(query);
-  }
-  let response = {
-    status: flights.length > 0,
-    message: flights.length > 0 ? 'Flights found' : 'No flights found',
-    flights: flights,
-  };
-
-  return res.status(200).json(response);
-} catch (error) {
-  console.log(error);
-  return res.status(500).json({ error: 'Internal Server Error' });
-}
-
+  res.status(200).json(response);
 });
 
+//search flights
+router.route("/searchflights").post(async (req, res) => {
+  const { flightName, fromLocation, toLocation, departureDate } = req.body;
+
+  try {
+    let flights = [];
+    const query = {};
+    console.log(req.body);
+    if (flightName) {
+      query.name = flightName;
+    }
+
+    if (fromLocation) {
+      query.from = fromLocation;
+    }
+
+    if (toLocation) {
+      query.to = toLocation;
+    }
+
+    if (departureDate) {
+      const startDate = new Date(departureDate);
+      const endDate = new Date(departureDate);
+      endDate.setDate(endDate.getDate() + 1);
+      query.departureDateTime = {
+        $gte: startDate,
+        $lt: endDate,
+      };
+    }
+    console.log(query);
+
+    if (Object.keys(query).length === 0) {
+      flights = await Flight.find();
+    } else {
+      flights = await Flight.find(query);
+    }
+    let response = {
+      status: flights.length > 0,
+      message: flights.length > 0 ? "Flights found" : "No flights found",
+      flights: flights,
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 //get flights
 router.route("/getflights").get(async (req, res) => {
@@ -110,7 +108,6 @@ router.route("/getflights").get(async (req, res) => {
 router
   .route("/bookflight")
   .post(middleware.checkUserToken, async (req, res) => {
-    
     const { email, flightname, count } = req.body;
     try {
       const user = await User.findOne({ email: email });
@@ -142,38 +139,38 @@ router
     }
   });
 
-
 //return all flights booked by user
-router.route("/getuserflights").post(middleware.checkUserToken,async (req, res) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    const bookedFlights = user.flights;
-    const flights = [];
-
-    for (const bookedFlight of bookedFlights) {
-      const { name, count } = bookedFlight;
-      const flight = await Flight.findOne({ name });
-      if (flight) {
-        flights.push({ flight: flight, count });
+router
+  .route("/getuserflights")
+  .post(middleware.checkUserToken, async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
       }
+      const bookedFlights = user.flights;
+      const flights = [];
+
+      for (const bookedFlight of bookedFlights) {
+        const { name, count } = bookedFlight;
+        const flight = await Flight.findOne({ name });
+        if (flight) {
+          flights.push({ flight: flight, count });
+        }
+      }
+
+      const response = {
+        status: true,
+        message: "User flights have been retrieved",
+        flights,
+      };
+
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).json({ error: "Internal Server Error" });
     }
-
-    const response = {
-      status: true,
-      message: "User flights have been retrieved",
-      flights,
-    };
-
-    return res.json(response);
-  } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
+  });
 
 //cancelbooking
 router
@@ -255,7 +252,7 @@ router.route("/login").post(async (req, res) => {
 router.route("/register").post(async (req, res) => {
   try {
     const { username, password, email } = req.body;
-
+    console.log(req.body);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
@@ -263,17 +260,16 @@ router.route("/register").post(async (req, res) => {
       password: hashedPassword,
       email: email,
     });
-
+    console.log(req.body + user);
     await user
       .save()
       .then(() => {
-        console.log("user registered");
         res
           .status(200)
           .json({ message: "User Successfully Registered", status: true });
       })
       .catch((err) => {
-        res.json({ message: err, status: false });
+        res.json({ message: JSON.stringify(err), status: false });
       });
   } catch (error) {
     return res.status(500).json({ message: error });

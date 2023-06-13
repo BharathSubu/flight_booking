@@ -16,16 +16,6 @@ const User = Schema({
     required: true,
     unique: true,
   },
-  aadhar: {
-    type: String,
-    default: null,
-    unique: true,
-  },
-  mobile: {
-    type: String,
-    default: null,
-    unique: true,
-  },
   isAdmin: {
     type: Boolean,
     default: false,
@@ -35,11 +25,9 @@ const User = Schema({
     {
       name: {
         type: String,
-        required: true,
       },
       count: {
         type: Number,
-        required: true,
         default: 1,
       },
     },

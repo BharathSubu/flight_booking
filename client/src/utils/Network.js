@@ -7,11 +7,11 @@ async function sendRequest(url, method, body = null) {
     method: method,
     headers: {
       "Content-Type": "application/json",
-      "authorization" : token ? `Bearer ${token}` : "",
-    },  
+      authorization: token ? `Bearer ${token}` : "",
+    },
     body: body ? JSON.stringify(body) : null,
   };
-//  console.log(token);
+  //  console.log(token);
   const response = await fetch(`${API_BASE_URL}${url}`, requestOptions);
   const data = await response.json();
 

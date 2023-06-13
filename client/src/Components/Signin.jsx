@@ -21,10 +21,11 @@ const Signin = ({ onButtonClicked, activeTab }) => {
       ? "null"
       : document.getElementById("adminkey").value;
     const body = {
-      username,
-      email,
-      password,
-      adminkey,
+      username: username,
+
+      password: password,
+      email: email,
+      adminkey: adminkey,
     };
     if (!username || !email || !password || (!isUser && !adminkey)) {
       alert("Please fill in all fields");
@@ -47,7 +48,10 @@ const Signin = ({ onButtonClicked, activeTab }) => {
     const response = await post(`${activeTab}/register`, body);
     if (response.status) {
       onButtonClicked();
-    } else alert("failed");
+      alert(response.message);
+    } else {
+      alert(response.message);
+    }
     setIsLoading(false);
   };
 

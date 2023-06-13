@@ -30,43 +30,102 @@ router.route("/checkemail/:email").get(async (req, res) => {
   }
 });
 
-//get allFlights
-router.route("/getallflights").get(middleware.checkAdminToken,async (req, res) => {
-  try {
-    const users = await User.find();
-    const flights = [];
+//get all flight
+router
+  .route("/getallflights")
+  .get(middleware.checkAdminToken, async (req, res) => {
+    try {
+      const flights = await Flight.find();
+      return res.json({ flights: flights, message: "Flights received" });
+    } catch (error) {
+      console.error("Error retrieving flights:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
 
-    for (const user of users) {
-      const { email } = user;
-      const bookedFlights = user.flights;
+//get allUserflights
+router
+  .route("/getalluserflights")
+  .get(middleware.checkAdminToken, async (req, res) => {
+    try {
+      const users = await User.find();
+      const flights = [];
 
-      for (const bookedFlight of bookedFlights) {
-        const { name, count } = bookedFlight;
-        const flight = await Flight.findOne({ name });
+      for (const user of users) {
+        const { email } = user;
+        const bookedFlights = user.flights;
 
-        if (flight) {
-          flights.push({ email, flight, count });
+        for (const bookedFlight of bookedFlights) {
+          const { name, count } = bookedFlight;
+          const flight = await Flight.findOne({ name });
+
+          if (flight) {
+            flights.push({ email, flight, count });
+          }
         }
       }
+
+      const response = {
+        status: true,
+        message: "User flights have been retrieved",
+        data: flights,
+      };
+
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).json({ error: "Internal Server Error" });
     }
+  });
 
-    const response = {
-      status: true,
-      message: "User flights have been retrieved",
-      flights,
-    };
+//cancel userBooking
+router
+  .route("/cancelbooking")
+  .post(middleware.checkAdminToken, async (req, res) => {
+    const flightname = req.body.flightname;
+    const email = req.body.email;
+    const count = req.body.count;
 
-    return res.json(response);
-  } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+    try {
+      const user = await User.findOne({ email });
 
-//return all flights
+      const flightIndex = user.flights.findIndex(
+        (flight) => flight.name === flightname
+      );
+
+      if (flightIndex !== -1) {
+        user.flights.splice(flightIndex, 1);
+
+        await user.save();
+
+        await Flight.updateOne(
+          { name: flightname },
+          { $inc: { currcapacity: -count } }
+        );
+
+        res
+          .status(200)
+          .json({
+            message: "Flight booking canceled successfully",
+            status: true,
+          });
+      } else {
+        res
+          .status(404)
+          .json({
+            message: "Flight not found in user's bookings",
+            status: false,
+          });
+      }
+    } catch (error) {
+      res.status(500).json({
+        message: "An error occurred while canceling the flight booking",
+      });
+    }
+  });
 
 //add flight
 router
-  .route("/addFlight")
+  .route("/addflight")
   .post(middleware.checkAdminToken, async (req, res) => {
     try {
       const {
@@ -76,10 +135,11 @@ router
         to,
         arrivalDateTime,
         price,
-        capacity,
+        maxcapacity,
       } = req.body;
 
-      const existingFlight = await Flight.findOne({ name });
+      const existingFlight = await Flight.findOne({ name: name });
+      console.log(existingFlight);
       if (existingFlight) {
         return res.json({ message: "Flight is already in Use", status: false });
       }
@@ -91,7 +151,7 @@ router
         to: to,
         arrivalDateTime: arrivalDateTime,
         price: price,
-        capacity: capacity,
+        maxcapacity: maxcapacity,
       });
 
       await newFlight.save();
@@ -106,25 +166,30 @@ router
   });
 
 //delete flight
-router.route("/deleteflight").post(middleware.checkAdminToken, async (req, res) => {
-  const flightName = req.body.name;
+router
+  .route("/deleteflight")
+  .post(middleware.checkAdminToken, async (req, res) => {
+    const flightName = req.body.name;
 
-  try {
-    const deletionResult = await Flight.deleteOne({ name: flightName });
-    if (deletionResult.deletedCount === 0) {
-      return res.status(200).json({ message: "Flight not found" });
+    try {
+      const deletionResult = await Flight.deleteOne({ name: flightName });
+      if (deletionResult.deletedCount === 0) {
+        return res
+          .status(200)
+          .json({ message: "Flight not found", status: true });
+      }
+      await User.updateMany(
+        { "flights.name": flightName },
+        { $pull: { flights: { name: flightName } } }
+      );
+      return res
+        .status(200)
+        .json({ message: "Flight deleted successfully", status: true });
+    } catch (error) {
+      console.error("Error deleting the flight:", error);
+      return res.status(500).json({ error: "Internal server error" });
     }
-    await User.updateMany(
-      { "flights.name": flightName },
-      { $pull: { flights: { name: flightName } } }
-    );
-    return res.status(200).json({ message: "Flight deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting the flight:", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
-
+  });
 
 //function to delete flight automatically after arrivaltime experies
 setInterval(async () => {
@@ -157,7 +222,7 @@ router.route("/login").post(async (req, res) => {
 
     if (isPasswordValid) {
       let token = jwt.sign(
-        { email: req.body.email , isAdmin: true },
+        { email: req.body.email, isAdmin: true },
         config.key,
         {}
       );

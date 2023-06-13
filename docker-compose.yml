@@ -1,10 +1,10 @@
 version : "3.3"
 
 services:
-  mongo:
+  mongod:
     restart: always
     image: mongo
-    container_name: mongo
+    container_name: mongod
     volumes:
       - ./mongo_data:/data/db
     ports:
@@ -15,39 +15,39 @@ services:
   api1:
     container_name: api1
     restart: always
-    image: api1:1.0
+    image: api1:2.0
     build:
       context: api
       dockerfile: Dockerfile 
     ports:
       - 2000:5000
     links:
-      - mongo
+      - mongod
     depends_on:
-      - mongo
+      - mongod
     networks:
       - shared-network
   
   api2:
     container_name: api2
     restart: always
-    image: api2:1.0
+    image: api2:2.0
     build:
       context: api
       dockerfile: Dockerfile 
     ports:
       - 2001:5000
     links:
-      - mongo
+      - mongod
     depends_on:
-      - mongo
+      - mongod
     networks:
       - shared-network
 
   load_balancer:
     container_name: load_balancer
     restart: always
-    image: load_balancer:1.0
+    image: load_balancer:2.0
     build:
       context: load_balancer
       dockerfile: Dockerfile 
@@ -64,12 +64,12 @@ services:
   
   client:
     container_name: app_client
-    image: react_app_client:1.0
+    image: react_app_client:2.0
     build:
       context: client
       dockerfile: Dockerfile 
     ports:
-      - 3000:3000
+      - 80:3000
     links:
       - load_balancer
     depends_on:

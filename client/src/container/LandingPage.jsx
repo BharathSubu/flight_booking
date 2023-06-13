@@ -27,7 +27,7 @@ const LandingPage = () => {
     }
   };
 
-  const returnLanding = () => {
+  const returnLanding = async () => {
     setLandingPage(true);
     setLogIn(false);
     setSignUp(false);
@@ -79,8 +79,6 @@ const LandingPage = () => {
 
   return (
     <div className="flex items-center justify-center h-screen  bg-gradient-to-b from-blue-100 via-blue-200 to-blue-300 opacity-100">
-      
-      
       <div className="relative justify-center m-5">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex justify-center mb-6">
