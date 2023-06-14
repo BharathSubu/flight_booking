@@ -9,7 +9,7 @@
 - [Technologies Used](#technologies-used)
 - [Getting Started](#installation)
 - [Logical view ](#logical-view )
-- [Frontend Tree Map](#frontend)
+- [Frontend Architecture](#frontend)
 - [Backend End Points](#end-points)
 
 ## Features
@@ -76,10 +76,35 @@ To setup the application in your pc follow the steps below:
    
 Note: To create account as Admin use adminkey : 12345
 
+## Installation Video
+[![Video](https://img.youtube.com/vi/wk-wcv9wbpI/0.jpg)](https://youtu.be/wk-wcv9wbpI)
 
 ## Logical view 
 <img src="https://i.imgur.com/mgPP6YF.png" alt="Logical View" width="70%">
 
-## frontend
+## Frontend
+<img src="https://i.imgur.com/as2kLKJ.png" alt="Logical View" width="90%">
 
 ## End Points
+## User
+
+- post: **/user/register** -> "Register User"
+- post: **/user/login** -> "Logins user and returns JWT token"
+- get : **/user/checkemail/:email** -> "Checks if user already exists in teh database"
+- get : **/user/getItems** -> "Return all distinct flight names , From and To place"
+- post: **/user/searchflights** -> "Searchs for a flight based on date, time , name"
+- get : **/user/getflights** -> "Returns all Available Flights"
+- post: **/user/bookflight** -> "Books a flight under the user's email"
+- post: **/user/getuserflights** -> "Returns all the flight booked by the user"
+- post: **/user/cancelflight** -> "Cancels flight booked by the user"
+
+## Admin
+
+- post: **/admin/register** -> "Register Admin"
+- post: **/admin/login** -> "Logins administrator and returns JWT token"
+- setInterval() -> "Delete Every Flight Whose arrivalTime is less than the current Time" 
+- post: **/admin/deleteflight** -> "Removes a flight from the Database"
+- post: **/admin/addflight** -> "Add flights to the database"
+- post: **/admin/cancelbooking** -> "Cancels flight booked by users"
+- get : **/admin/getalluserflights** -> "Return all flights booked by user along with the ticket count"
+- get : **/admin/getallflights** -> "Return all the flights"
